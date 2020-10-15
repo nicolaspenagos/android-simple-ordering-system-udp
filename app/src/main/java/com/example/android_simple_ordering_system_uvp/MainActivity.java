@@ -8,12 +8,19 @@ package com.example.android_simple_ordering_system_uvp;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+import com.example.android_simple_ordering_system_uvp.events.OnMessageListener;
+import com.example.android_simple_ordering_system_uvp.model.Confirmation;
+import com.example.android_simple_ordering_system_uvp.model.Generic;
+import com.example.android_simple_ordering_system_uvp.model.Order;
+import com.google.gson.Gson;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnMessageListener{
 
     // -------------------------------------
     // XML references
@@ -71,4 +78,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
+
+    @Override
+    public void onMessage(String json) {
+
+        Gson gson = new Gson();
+        Generic generic = gson.fromJson(json, Generic.class);
+
+        switch (generic.type){
+
+            case "Confirmation":
+
+                Confirmation confirmation = gson.fromJson(json, Confirmation.class);
+
+                runOnUiThread(
+
+                        ()->{
+
+                            Intent i = new Intent(this, ConfirmationActivity.class);
+                            startActivity(i);
+                            finish();
+
+                        }
+
+                );
+
+                break;
+
+            case "Order":
+
+                Order order = gson.fromJson(json,  Order.class);
+                break;
+
+        }
+    }
+
 }
