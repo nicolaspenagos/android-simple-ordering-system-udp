@@ -21,7 +21,7 @@ public class Confirmation {
         this.id = id;
         this.confirmationMessage = confirmationMessage;
         this.description = description;
-        
+
     }
 
     // -------------------------------------
