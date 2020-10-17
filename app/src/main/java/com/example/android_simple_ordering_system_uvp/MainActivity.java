@@ -13,12 +13,18 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.android_simple_ordering_system_uvp.events.OnMessageListener;
 import com.example.android_simple_ordering_system_uvp.model.Confirmation;
 import com.example.android_simple_ordering_system_uvp.model.Generic;
 import com.example.android_simple_ordering_system_uvp.model.Order;
 import com.google.gson.Gson;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnMessageListener{
 
@@ -29,6 +35,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView product2ImageView;
     private ImageView product3ImageView;
     private ImageView product4ImageView;
+
+    // -------------------------------------
+    // Global assets
+    // -------------------------------------
+    private UDPConnection udp;
 
     // -------------------------------------
     // Android methods
@@ -46,6 +57,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         animationDrawable.setExitFadeDuration(4000);
         animationDrawable.start();
 
+        udp = new UDPConnection();
+        udp.setObserver(this);
+        udp.start();
+
+
         product1ImageView = findViewById(R.id.product1ImageView);
         product2ImageView = findViewById(R.id.product2ImageView);
         product3ImageView = findViewById(R.id.product3ImageView);
@@ -61,18 +77,47 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
 
+        Gson gson = new Gson();
+
+        Order order = new Order();
+        order.setId(UUID.randomUUID().toString());
+        order.setDate(new GregorianCalendar());
+        order.setDescription("It represents an order that has been placed");
+
+        String json;
+
         switch (v.getId()){
 
             case R.id.product1ImageView:
+
+                order.setProduct("BURGER");
+                json = gson.toJson(order);
+                udp.sendMessage(json);
+
                 break;
 
             case R.id.product2ImageView:
+
+                order.setProduct("COCA_COLA");
+                json = gson.toJson(order);
+                udp.sendMessage(json);
+
                 break;
 
             case R.id.product3ImageView:
+
+                order.setProduct("ICE_CREAM");
+                json = gson.toJson(order);
+                udp.sendMessage(json);
+
                 break;
 
             case R.id.product4ImageView:
+
+                order.setProduct("SANDWICH");
+                json = gson.toJson(order);
+                udp.sendMessage(json);
+
                 break;
 
         }
@@ -91,17 +136,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 Confirmation confirmation = gson.fromJson(json, Confirmation.class);
 
-                runOnUiThread(
+                if(confirmation.getConfirmationMessage().equals("DONE")){
 
-                        ()->{
+                    runOnUiThread(
 
-                            Intent i = new Intent(this, ConfirmationActivity.class);
-                            startActivity(i);
-                            finish();
+                            ()->{
 
-                        }
+                                Intent i = new Intent(this, ConfirmationActivity.class);
+                                startActivity(i);
+                                finish();
 
-                );
+                            }
+
+                    );
+
+                }else if(confirmation.getConfirmationMessage().equals("FULL_STACK")){
+                    runOnUiThread(()-> Toast.makeText(this, "The oders stack is full, please wait.", Toast.LENGTH_SHORT).show());
+                }
+
+
 
                 break;
 

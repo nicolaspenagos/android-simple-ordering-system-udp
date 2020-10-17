@@ -5,6 +5,8 @@
  */
 package com.example.android_simple_ordering_system_uvp;
 
+import android.util.Log;
+
 import com.example.android_simple_ordering_system_uvp.events.OnMessageListener;
 import com.example.android_simple_ordering_system_uvp.model.Confirmation;
 import com.example.android_simple_ordering_system_uvp.model.Generic;
@@ -73,6 +75,7 @@ public class UDPConnection extends Thread {
 
                         InetAddress ip = InetAddress.getByName("192.168.20.36");
                         DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.getBytes().length, ip, 5000);
+                        Log.e("Debug", "sendMessage: "+msg);
                         socket.send(packet);
 
                     } catch (UnknownHostException e) {

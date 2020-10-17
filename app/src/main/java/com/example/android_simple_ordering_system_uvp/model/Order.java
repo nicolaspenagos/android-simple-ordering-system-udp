@@ -5,6 +5,7 @@
  */
 package com.example.android_simple_ordering_system_uvp.model;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class Order {
@@ -15,8 +16,8 @@ public class Order {
     // Atributtes
     // -------------------------------------
     private String id;
-    private Enum product;
-    private Date date;
+    private String product;
+    private Calendar date;
     private String description;
 
     // -------------------------------------
@@ -26,7 +27,7 @@ public class Order {
 
     }
 
-    public Order(String id, Enum product, Date date, String description) {
+    public Order(String id, String product, Calendar date, String description) {
 
         this.id = id;
         this.product = product;
@@ -46,19 +47,19 @@ public class Order {
         this.id = id;
     }
 
-    public Enum getProduct() {
+    public String getProduct() {
         return product;
     }
 
-    public void setProduct(Enum product) {
+    public void setProduct(String product) {
         this.product = product;
     }
 
-    public Date getDate() {
+    public Calendar getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Calendar date) {
         this.date = date;
     }
 
