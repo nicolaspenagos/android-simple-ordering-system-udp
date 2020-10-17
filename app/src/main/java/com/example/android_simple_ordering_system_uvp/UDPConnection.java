@@ -40,7 +40,7 @@ public class UDPConnection extends Thread {
 
                     try {
 
-                        socket = new DatagramSocket(6000);
+                        socket = new DatagramSocket(6001);
 
                         kill = false;
                         while(!kill){
@@ -50,8 +50,8 @@ public class UDPConnection extends Thread {
                             DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                             socket.receive(packet);
 
-                            String json = new String(packet.getData()).trim();
-                            observer.onMessage(json);
+                            String msg = new String(packet.getData()).trim();
+                            observer.onMessage(msg);
 
                         }
 

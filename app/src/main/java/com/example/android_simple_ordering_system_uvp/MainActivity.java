@@ -11,6 +11,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -125,9 +126,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onMessage(String json) {
+    public void onMessage(String msg) {
+
 
         Gson gson = new Gson();
+        String[] parts = msg.split("%");
+        Log.e("debug", parts[0]);
+        Log.e("debug", parts[1]);
+        String json = parts[0];
+        int orderIndex = Integer.parseInt(parts[1]);
+
         Generic generic = gson.fromJson(json, Generic.class);
 
         switch (generic.type){
@@ -143,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             ()->{
 
                                 Intent i = new Intent(this, ConfirmationActivity.class);
+                                i.putExtra("orderIndex", orderIndex);
                                 startActivity(i);
 
 
