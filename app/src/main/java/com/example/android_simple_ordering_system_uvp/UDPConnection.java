@@ -40,7 +40,7 @@ public class UDPConnection extends Thread {
 
                     try {
 
-                        socket = new DatagramSocket(6001);
+                        socket = new DatagramSocket(6000);
 
                         kill = false;
                         while(!kill){
